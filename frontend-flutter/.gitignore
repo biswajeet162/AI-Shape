@@ -1,0 +1,23 @@
+# Flutter
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+coverage/
+.widget_preview/
+
+# Symbolication / obfuscation
+app.*.symbols
+app.*.map.json
+
+# Platform build outputs
+android/app/debug
+android/app/profile
+android/app/release
+ios/Flutter/.last_build_id
+**/doc/api/
+
+# Secrets
+.env
+.env.local

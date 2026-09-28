@@ -1,0 +1,18 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Local storage uploads
+storage/
+
+# Secrets
+.env
+.env.local
+
+# IDE
+*.iml
+.idea/
+
+# OS
+.DS_Store
+*.log
