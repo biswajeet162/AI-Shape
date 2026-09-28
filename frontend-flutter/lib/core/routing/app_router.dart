@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/explore/presentation/explore_screen.dart';
 import '../../features/history/presentation/history_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/templates/presentation/template_detail_screen.dart';
 import 'main_shell.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -48,36 +49,41 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      // Placeholders for later phases — keep route contract ready.
       GoRoute(
         path: '/template/:id',
         name: 'template',
-        builder: (context, state) => _PlaceholderRoute(
-          title: 'Template',
-          detail: state.pathParameters['id'] ?? '',
-        ),
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return TemplateDetailScreen(templateId: id);
+        },
       ),
       GoRoute(
         path: '/photo/:templateId',
         name: 'photo',
-        builder: (context, state) => _PlaceholderRoute(
-          title: 'Choose Photo',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => _PhasePlaceholder(
+          title: 'Choose your photo',
+          message: 'Camera and gallery selection arrive in Phase 3.',
           detail: state.pathParameters['templateId'] ?? '',
         ),
       ),
       GoRoute(
         path: '/generate',
         name: 'generate',
-        builder: (context, state) => const _PlaceholderRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const _PhasePlaceholder(
           title: 'Generate',
-          detail: 'Coming in Phase 4',
+          message: 'AI generation arrives in Phase 4.',
         ),
       ),
       GoRoute(
         path: '/result/:generationId',
         name: 'result',
-        builder: (context, state) => _PlaceholderRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => _PhasePlaceholder(
           title: 'Result',
+          message: 'Results arrive in Phase 4.',
           detail: state.pathParameters['generationId'] ?? '',
         ),
       ),
@@ -85,11 +91,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class _PlaceholderRoute extends StatelessWidget {
-  const _PlaceholderRoute({required this.title, required this.detail});
+class _PhasePlaceholder extends StatelessWidget {
+  const _PhasePlaceholder({
+    required this.title,
+    required this.message,
+    this.detail,
+  });
 
   final String title;
-  final String detail;
+  final String message;
+  final String? detail;
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +109,37 @@ class _PlaceholderRoute extends StatelessWidget {
         title: Text(title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.go('/home'),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
         ),
       ),
       body: Center(
-        child: Text(detail, style: Theme.of(context).textTheme.bodyMedium),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                message,
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              if (detail != null && detail!.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  detail!,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

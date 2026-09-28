@@ -57,4 +57,12 @@ src/main/java/com/aiphotostudio/
 └── storage/      # Phase 4
 ```
 
+## APIs (Phase 2)
+
+- `GET /api/v1/categories`
+- `GET /api/v1/templates?category=Retro&trending=true`
+- `GET /api/v1/templates/{idOrSlug}`
+
+Prompts stay on the server and are not returned to Flutter.
+
 Frontend lives in sibling folder: `../frontend-flutter`.

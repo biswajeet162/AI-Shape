@@ -9,7 +9,9 @@ void main() {
         child: AiPhotoStudioApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    // Allow first frame; network-backed providers may still be loading.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.text('AI Photo Studio'), findsWidgets);
     expect(find.text('Create. Transform. Share.'), findsOneWidget);

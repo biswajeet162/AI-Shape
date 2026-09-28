@@ -46,6 +46,8 @@ lib/
 └── features/       # home, explore, templates, history, …
 ```
 
+Home and Explore load styles from the Spring Boot API. Template detail uses `/template/:id` and CTA navigates to `/photo/:templateId` (Phase 3).
+
 Product name is configurable in `lib/core/constants/app_constants.dart`.
 
 Backend lives in sibling folder: `../backend-spring-boot`.
